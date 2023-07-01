@@ -193,7 +193,7 @@ public class GameScreen implements Screen{
 		}
 		
 		
-//		gravity
+//		gravity, needs to get velocity
 		if (collisionCheck(bucket.x,bucket.y-1-moveSpeed)==false) {
 			bucket.y -= gravity * Gdx.graphics.getDeltaTime();
 		}
