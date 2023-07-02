@@ -37,7 +37,7 @@ public class GameScreen implements Screen{
 	boolean afloat = false;
 	
 	float velocity = 1.04f;
-	float gravity=200f;
+	float gravity=-200f;
 	
 
 	public GameScreen(final Dscgame game) {
@@ -115,7 +115,6 @@ public class GameScreen implements Screen{
 		while (blocker.hasNext()) {
 			Rectangle block = blocker.next();
 			if (block.overlaps(bucketP)) {
-				System.out.println("Overlaps" + Gdx.graphics.getDeltaTime());
 				return true;
 			}
 		}
@@ -123,26 +122,15 @@ public class GameScreen implements Screen{
 	}
 	
 	public void gravityCalc() {
-		if (collisionCheck(bucket.x,bucket.y-1-gravity*Gdx.graphics.getDeltaTime())==false) {
-			gravity = gravity*velocity;
-			if (collisionCheck(bucket.x,bucket.y-1-gravity*Gdx.graphics.getDeltaTime())==false) {
-				bucket.y -= gravity * Gdx.graphics.getDeltaTime();
+		if (collisionCheck(bucket.x,bucket.y-1+gravity*Gdx.graphics.getDeltaTime())==false) {
+			gravity += -200f*velocity;
+			if (collisionCheck(bucket.x,bucket.y-1+gravity*Gdx.graphics.getDeltaTime())==false) {
+				bucket.y += gravity * Gdx.graphics.getDeltaTime();
 			}
 		}
 		else {
-			gravity = 200f;
+			gravity = -200f;
 		}
-	}
-	public int jumpWithCheck(int k, float moveSpeed) {
-		if (k>0&&collisionCheck(bucket.x,bucket.y+1+moveSpeed)==false)
-		{
-			bucket.y += 0.5*moveSpeed;
-			return k + jumpWithCheck(k-1,moveSpeed);
-		}
-		else {
-			return 0;
-		}
-		
 	}
 
 	@Override
@@ -196,10 +184,12 @@ public class GameScreen implements Screen{
 			bucket.x += moveSpeed;
 		if (Gdx.input.isKeyPressed(Keys.DOWN)&& collisionCheck(bucket.x,bucket.y-1-moveSpeed)==false)
 			bucket.y -= moveSpeed;
+		//Jump
 		if (Gdx.input.isKeyPressed(Keys.SPACE)&& collisionCheck(bucket.x,bucket.y-1-moveSpeed)==true) {
-			jumpWithCheck(150,moveSpeed);
+			gravity = 2500f;
 		}
 		
+		//gravity
 		gravityCalc();
 	    
 		// make sure the bucket stays within the screen bounds
