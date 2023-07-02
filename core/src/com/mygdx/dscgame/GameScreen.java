@@ -21,10 +21,16 @@ public class GameScreen implements Screen{
 
 	Texture dropImage;
 	Texture bucketImage;
-	Texture backPaper;
+	Texture hell;
 	Texture diamond;
+	Texture cassiel;
+	Texture comet;
+	
+	
 	Sound dropSound;
-	Music rainMusic;
+	Music pixelMusic;
+	
+	
 	OrthographicCamera camera;
 	Rectangle bucket;
 	Rectangle bucketP;
@@ -46,13 +52,15 @@ public class GameScreen implements Screen{
 		// load the images for the droplet and the bucket, 64x64 pixels each
 		dropImage = new Texture(Gdx.files.internal("drop.png"));
 		bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-		backPaper = new Texture(Gdx.files.internal("wallpaper.jpg"));
+		hell = new Texture(Gdx.files.internal("hell.png"));
 		diamond = new Texture(Gdx.files.internal("walkstone.png"));
+		cassiel = new Texture(Gdx.files.internal("cassiel.png")); 
+		comet = new Texture(Gdx.files.internal("comet.png")); 
 
 		// load the drop sound effect and the rain background "music"
 		dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-		rainMusic.setLooping(true);
+		pixelMusic = Gdx.audio.newMusic(Gdx.files.internal("pixelMusic.mp3"));
+		pixelMusic.setLooping(true);
 
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -63,8 +71,8 @@ public class GameScreen implements Screen{
 		bucket.x = 1280 / 2 - 64 / 2; // center the bucket horizontally
 		bucket.y = 100; // bottom left corner of the bucket is 20 pixels above
 						// the bottom screen edge
-		bucket.width = 64;
-		bucket.height = 64;
+		bucket.width = 75;
+		bucket.height = 125;
 		
 		bucketP = new Rectangle();
 		bucketP.x=bucket.x;
@@ -87,7 +95,7 @@ public class GameScreen implements Screen{
 	private void createWorld() {
 
 		Rectangle block = new Rectangle();
-		for(int i=0;i<20;i++)
+		for(int i=0;i<400;i++)
 		{
 			block = new Rectangle();
 			block.x = i*64;
@@ -156,12 +164,12 @@ public class GameScreen implements Screen{
 		game.batch.begin();
 
 		//draw background
-		game.batch.draw(backPaper, camera.position.x-(1280/2f), 0);
+		game.batch.draw(hell, camera.position.x-(1280/2f), 0);
 		
 		game.font.draw(game.batch, "Drops Collected: " + dropsGathered, 0, 720);
-		game.batch.draw(bucketImage, bucket.x, bucket.y, bucket.width, bucket.height);
+		game.batch.draw(cassiel, bucket.x, bucket.y, bucket.width, bucket.height);
 		for (Rectangle raindrop : raindrops) {
-			game.batch.draw(dropImage, raindrop.x, raindrop.y);
+			game.batch.draw(comet, raindrop.x, raindrop.y);
 		}
 		for(Rectangle block : blocks) {
 			game.batch.draw(diamond,block.x,block.y);
@@ -231,7 +239,7 @@ public class GameScreen implements Screen{
 	public void show() {
 		// start the playback of the background music
 		// when the screen is shown
-		rainMusic.play();
+		pixelMusic.play();
 	}
 
 	@Override
@@ -248,11 +256,12 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		backPaper.dispose();
+		hell.dispose();
 		dropImage.dispose();
+		cassiel.dispose();
 		bucketImage.dispose();
 		dropSound.dispose();
-		rainMusic.dispose();
+		pixelMusic.dispose();
 	}
 
 }
