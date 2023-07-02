@@ -34,15 +34,11 @@ public class GameScreen implements Screen{
 	long lastDropTime;
 	int dropsGathered;
 	
-	float lastx=0;
-	float lasty=0;
+	boolean afloat = false;
 	
-	float velocity = 0.98f;
-	int gravity=200;
-	boolean collides = false;
+	float velocity = 1.04f;
+	float gravity=200f;
 	
-	float cby=0;
-	float cbx=0;
 
 	public GameScreen(final Dscgame game) {
 		this.game = game;
@@ -125,6 +121,18 @@ public class GameScreen implements Screen{
 		}
 		return false;
 	}
+	
+	public void gravityCalc() {
+		if (collisionCheck(bucket.x,bucket.y-1-gravity*Gdx.graphics.getDeltaTime())==false) {
+			gravity = gravity*velocity;
+			if (collisionCheck(bucket.x,bucket.y-1-gravity*Gdx.graphics.getDeltaTime())==false) {
+				bucket.y -= gravity * Gdx.graphics.getDeltaTime();
+			}
+		}
+		else {
+			gravity = 200f;
+		}
+	}
 	public int jumpWithCheck(int k, float moveSpeed) {
 		if (k>0&&collisionCheck(bucket.x,bucket.y+1+moveSpeed)==false)
 		{
@@ -189,16 +197,11 @@ public class GameScreen implements Screen{
 		if (Gdx.input.isKeyPressed(Keys.DOWN)&& collisionCheck(bucket.x,bucket.y-1-moveSpeed)==false)
 			bucket.y -= moveSpeed;
 		if (Gdx.input.isKeyPressed(Keys.SPACE)&& collisionCheck(bucket.x,bucket.y-1-moveSpeed)==true) {
-			jumpWithCheck(15,moveSpeed);
+			jumpWithCheck(150,moveSpeed);
 		}
 		
-		
-//		gravity, needs to get velocity
-		if (collisionCheck(bucket.x,bucket.y-1-moveSpeed)==false) {
-			bucket.y -= gravity * Gdx.graphics.getDeltaTime();
-		}
+		gravityCalc();
 	    
-
 		// make sure the bucket stays within the screen bounds
 		if (bucket.x < 0)
 			bucket.x = 0;
@@ -227,6 +230,7 @@ public class GameScreen implements Screen{
 		
 		//camera follow the player/bucket
 		camera.position.set(bucket.x,720/2f,0);
+		
 	}
 
 	@Override
